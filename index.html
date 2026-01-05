@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThunFaskyのサイト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
+
+    <style>
+        /* --- 0. フォントの読み込み設定 --- */
+        @font-face {
+            font-family: 'MyShikakuFont';
+            src: url('fonts/Shikakufuto_ver20251224.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'MyScoreFont';
+            src: url('fonts/x14y20pxScoreDozer.ttf') format('truetype');
+        }
+
+        /* --- デザイン設定 (CSS変数) --- */
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --accent-color: #FFB300; 
+            --card-bg: #2d2d2d;
+            --section-gap: 80px;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* --- ヘッダー（バナー） --- */
+        header {
+            text-align: center;
+            padding: 5px 20px 25px; 
+            position: relative;
+            background-color: #FF9800;
+            background-image: 
+                radial-gradient(at 0% 0%, #FFF59D 0px, transparent 55%),
+                radial-gradient(at 100% 0%, #FFB74D 0px, transparent 50%),
+                radial-gradient(at 100% 100%, #F4511E 0px, transparent 55%),
+                radial-gradient(at 0% 100%, #FFD54F 0px, transparent 50%),
+                radial-gradient(at 50% 50%, #FF7043 0px, transparent 60%);
+            border-bottom: 3px solid #E65100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .banner-img {
+            max-width: 256px !important;
+            max-height: 256px !important;
+            width: auto;
+            height: auto;
+            display: block;
+            border: none !important;
+            box-shadow: none !important;
+            margin-bottom: -5px;
+            object-fit: contain;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+            font-weight: normal;
+            font-family: 'MyShikakuFont', sans-serif; 
+        }
+
+        /* --- コンテンツエリア --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            margin-bottom: var(--section-gap);
+        }
+
+        .container img:not(.banner-img), 
+        .container video, 
+        .container iframe,
+        .main-img-box {
+            box-sizing: border-box;
+            border: 1.5px solid var(--accent-color);
+            border-radius: 4px;
+        }
+
+        /* iframeのボーダー調整 */
+        iframe.google-form {
+            border: 1.5px solid var(--accent-color) !important;
+            width: 100%;
+            height: 600px;
+            background-color: #fff;
+        }
+
+        h2 {
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #2d2d2d, transparent);
+            padding-top: 5px;
+            padding-bottom: 5px;
+            font-weight: normal;
+            font-family: 'MyShikakuFont', sans-serif;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            display: inline-block;
+            font-size: 1.2rem;
+        }
+
+        h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: normal;
+            font-family: 'MyShikakuFont', sans-serif;
+        }
+
+        /* --- リンクボタン --- */
+        .link-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .btn-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #222;
+            color: #bbb;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: 0.3s;
+            border: 1px solid #444;
+            font-size: 0.9rem;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2); 
+        }
+        .btn-link:hover {
+            border-color: var(--accent-color);
+            color: #fff;
+            background-color: #333;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px rgba(255, 179, 0, 0.2);
+        }
+
+        /* --- 誕生日セクション --- */
+        .birthday-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
+            border: 1.5px solid var(--accent-color);
+            margin-top: 25px;
+        }
+
+        .cake-box { 
+            width: 150px; 
+            height: 150px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow: visible;
+            background: transparent;
+            position: relative;
+        }
+        
+        #cake-3d-canvas {
+            width: 100% !important;
+            height: 100% !important;
+            image-rendering: pixelated; 
+            /* 発光しない白い縁取りをCSSで表現。色をイメージカラーに変更 */
+            filter: drop-shadow(0px 0px 2px var(--accent-color)) drop-shadow(0px 0px 2px var(--accent-color));
+        }
+
+        .countdown-info { text-align: right; }
+        .current-age { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 5px; }
+        #timer { font-size: 1.8rem; color: #fff; letter-spacing: 2px; }
+
+        /* --- デバイスセクション（旧スタイルは削除し、collage-gridを利用） --- */
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-family: 'MyScoreFont', monospace; font-weight: normal; }
+        .spec-table th, .spec-table td { text-align: left; padding: 8px 0; border-bottom: 1px solid #444; }
+        .spec-table th { width: 110px; color: var(--accent-color); }
+
+        /* --- 基本のグリッド（アプリ用） --- */
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .media-item {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4);
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+        .media-item img, .media-item video { width: 100%; display: block; cursor: pointer; }
+        .caption { margin-top: 15px; font-size: 0.9rem; color: #bbb; }
+
+        /* --- コラージュ用グリッド --- */
+        .collage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1.5px solid var(--accent-color);
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
+        }
+        .collage-item {
+            margin: 0;
+            padding: 0;
+            background-color: var(--card-bg); /* 背景をグレーに統一 */
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative; /* ラベル配置用 */
+        }
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 1:1の枠に収める */
+            border: none !important;
+            border-radius: 0 !important;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            cursor: pointer;
+        }
+        .collage-item img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+            z-index: 1;
+        }
+
+        /* デバイスタイル用のラベル */
+        .device-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            font-family: 'MyShikakuFont', sans-serif;
+            font-size: 0.9rem;
+            pointer-events: none; /* クリックを画像に透過させる */
+        }
+
+        /* --- もっと見るボタン --- */
+        .load-more-btn {
+            display: block;
+            margin: 30px auto 0;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid var(--accent-color);
+            padding: 10px 40px;
+            font-family: 'MyShikakuFont', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.4);
+        }
+        .load-more-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.4);
+            transform: translate(-2px, -2px);
+        }
+        .hidden-item { display: none !important; }
+
+        .font-digital { font-family: 'MyScoreFont', monospace; letter-spacing: 1px; font-weight: normal; }
+
+        /* --- 詳細表示用モーダル（アニメーション強化） --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show { opacity: 1; }
+        .modal-content {
+            max-width: 90%;
+            max-height: 70%; /* キャプションが入る分少し小さく */
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 179, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            object-fit: contain;
+        }
+        .modal.show .modal-content { transform: scale(1); }
+        .modal-caption {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 1rem;
+            text-align: left; /* スペック表などが見やすいように左寄せ */
+            font-family: 'MyShikakuFont', sans-serif;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.3s delay 0.1s;
+            max-width: 90%; /* 画面幅に合わせる */
+        }
+        /* スペック表のスタイル調整 */
+        .modal-caption .spec-table th {
+            color: var(--accent-color);
+            font-family: 'MyScoreFont', monospace;
+        }
+        .modal.show .modal-caption { opacity: 1; transform: translateY(0); }
+        .close-btn { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; transition: 0.2s; }
+        .close-btn:hover { color: var(--accent-color); }
+
+        footer { text-align: center; padding: 30px; background-color: #111; font-size: 0.8rem; color: #777; border-top: 1px solid #333; }
+
+        /* --- クレジット表記用スタイル（追加分） --- */
+        .credits {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #888;
+            text-align: left;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .credits ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .credits li {
+            margin-bottom: 2px;
+        }
+        .credits strong {
+            color: var(--accent-color);
+            margin-right: 5px;
+            font-weight: normal;
+            font-family: 'MyScoreFont', monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="images/bannerIllust.png" alt="ThunFasky Banner" class="banner-img">
+        <h1>ThunFaskyのサイト</h1>
+    </header>
+
+    <div class="container">
+
+        <section>
+            <h2>このサイトについて</h2>
+            <p>ThunFaskyのサイトです。何かしらをまとめていきます。</p>
+            <div class="link-container">
+                <a href="https://x.com/ThunFasky" class="btn-link" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a>
+                <a href="https://www.youtube.com/@ThunFasky" class="btn-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+                <a href="https://steamcommunity.com/id/ThunFasky/" class="btn-link" target="_blank"><i class="fab fa-steam"></i> Steam</a>
+            </div>
+            <div class="birthday-container">
+                <div id="cake-3d-box" class="cake-box"></div>
+                <div class="countdown-info">
+                    <div id="age-text" class="current-age font-digital">AGE: Calculating...</div>
+                    <div id="timer" class="font-digital">00d 00h 00m 00s</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>デバイス</h2>
+            <div class="collage-grid" id="device-grid">
+                <div class="collage-item">
+                    <img src="images/desktopPic1.png" alt="Main PC" onclick="openModalWithHtml(this.src, '<h4>メインPC</h4><table class=\'spec-table\'><tr><th>CPU</th><td>Ryzen 9 9950X</td></tr><tr><th>GPU</th><td>Radeon RX 7900 XT OC</td></tr><tr><th>RAM</th><td>64GB DDR5</td></tr><tr><th>ROM</th><td>M.2 NVMe SSD 1+2+2TB</td></tr><tr><th>PSU</th><td>850w GOLD</td></tr><tr><th>Case</th><td>Geometric Future Model 5</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
+                    <div class="device-label">Main PC</div>
+                </div>
+                <div class="collage-item">
+                    <img src="images/laptopPic1.png" alt="Laptop" onclick="openModalWithHtml(this.src, '<h4>DELL Inspiron 14 5445</h4><table class=\'spec-table\'><tr><th>APU</th><td>Ryzen 7 8840U / Radeon 780M</td></tr><tr><th>RAM</th><td>32GB DDR5</td></tr><tr><th>ROM</th><td>SSD 1TB</td></tr><tr><th>RES</th><td>1920x1200 60Hz</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
+                    <div class="device-label">Laptop</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>制作物</h2>
+            <h3>アプリケーション等</h3>
+            <div class="media-grid" id="apps-grid">
+                <div class="media-item">
+                    <img src="images/MyFavMusicBox.png" alt="MyFavMusicBox" onclick="openModal(this.src, 'MyFavMusicBox')">
+                    <div class="caption"><strong class="font-digital">MyFavMusicBox</strong><br>MP4やMP3等音声形式ファイルに対応</div>
+                </div>
+            </div>
+
+            <h3>イラスト</h3>
+            <div class="collage-grid" id="illust-grid">
+                <div class="collage-item"><img src="images/バナーイラスト背景カラーあり.png" alt="ILLUST-MyDesk" onclick="openModal(this.src, '自分のデスク周りのイラスト')"></div>
+                <div class="collage-item"><img src="images/brimstone.png" alt="" onclick="openModal(this.src, 'スマホの扱いに慣れないブリムストーン')"></div>
+                <div class="collage-item"><img src="images/ヘイリーとエルフィン.png" alt="" onclick="openModal(this.src, 'ヘイリーとエルフィン')"></div>
+                <div class="collage-item"><img src="images/月島しじま.png" alt="" onclick="openModal(this.src, '月島しじま')"></div>
+                <div class="collage-item"><img src="images/シル.png" alt="" onclick="openModal(this.src, 'シル')"></div>
+                <div class="collage-item"><img src="images/ギデオン.png" alt="" onclick="openModal(this.src, 'ギデオン')"></div>
+                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
+                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
+            </div>
+
+            <h3>作曲したもの</h3>
+            
+            <div class="media-grid">
+                <div style="padding: 10px; color: #888;">まだない</div>
+            </div>
+
+            <h2>作った動画</h2>
+            <div class="media-item">
+            
+            <video id="myVideo" controls playsinline style="width: 100%; border-radius: 4px; border: 1px solid #333;" poster="images/thumbnail_sample.jpg">
+                <source src="videos/M3 2025_Autumn Teres_DotBatTunes.mp4" type="video/mp4">
+                お使いのブラウザは動画タグに対応していません。
+            </video>
+
+            <div class="caption">
+                <strong class="font-digital" style="font-size:30px;">Teres 2025Autumn M3 CFD</strong>
+                
+                <div style="margin-top: 8px; margin-bottom: 12px;">
+                    <a href="https://twitter.com/TeresDtm/status/1981677048461726151" target="_blank" style="text-decoration: none; color: #1DA1F2; font-size: 0.9rem;">
+                        <i class="fab fa-twitter"></i> 元のツイート（公開元）を見る <i class="fas fa-external-link-alt" style="font-size: 0.8em;"></i>
+                    </a>
+                </div>
+
+                <div class="credits">
+                    <ul>
+                        <li><strong>Mastering:</strong> HALT (<a href="https://x.com/HALT668896" target="_blank" style="color: inherit;">@HALT668896</a>)</li>
+                        <li><strong>Illustration & Design:</strong> 空琳ゴ (<a href="https://x.com/sola_r1ngo" target="_blank" style="color: inherit;">@sola_r1ngo</a>)</li>
+                        <li><strong>CFD:</strong> ThunFasky</li>
+                    </ul>
+                </div>
+            </div>
+
+            <script>
+                // ページが読み込まれたら音量を0.25 (25%) に設定する
+                const videoElement = document.getElementById('myVideo');
+                if (videoElement) {
+                    videoElement.volume = 0.2;
+                }
+            </script>
+
+        </div>
+
+                
+        </section>
+
+        <section>
+            <h2>ゲームのクリップ等</h2>
+            <div class="media-grid">
+                <div style="padding: 10px; color: #888;">まだない</div>
+                <!-- <div class="media-item">
+                    <video controls playsinline poster="https://via.placeholder.com/400x225?text=Thumbnail">
+                        <source src="sample_valorant.mp4" type="video/mp4">
+                    </video>
+                    <div class="caption"><strong class="font-digital">Valorant Clip #1</strong></div>
+                </div> -->
+            </div>
+        </section>
+
+        <section>
+            <h2>ギャラリー</h2>
+            <div class="collage-grid" id="gallery-grid">
+                <div class="collage-item"><img src="images/desktopPic2.png" alt="desktopPic" onclick="openModal(this.src, 'デスクトップの中身')"></div>
+                <div class="collage-item"><img src="images/とりさん.png" alt="bird" onclick="openModal(this.src, '初詣の時に見た鳥')"></div>
+                <div class="collage-item"><img src="images/hatsumoude2026.jpg" alt="" onclick="openModal(this.src, '初詣2026')"></div>
+                <div class="collage-item"><img src="images/shizuoka.jpg" alt="" onclick="openModal(this.src, '年末富士山2025')"></div>
+                <div class="collage-item"><img src="images/akibasimulation2026.jpg" alt="" onclick="openModal(this.src, '秋葉シミュレーション2026')"></div>
+                <div class="collage-item"><img src="images/SuEn2Mid.jpg" alt="" onclick="openModal(this.src, '数円2中間結果')"></div>
+                <div class="collage-item"><img src="images/Christmas2025.jpg" alt="" onclick="openModal(this.src, 'バナル帰りに見たクリスマスの飾り物')"></div>
+                <div class="collage-item"><img src="images/調布祭Teres2025.jpg" alt="" onclick="openModal(this.src, '調布祭終わりの後ろ黒板')"></div>
+                <div class="collage-item"><img src="images/ぬいズ.jpg" alt="" onclick="openModal(this.src, '机の上に置いてあるぬいズ')"></div>
+                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
+                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
+                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
+                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
+                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
+                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
+                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
+            </div>
+        </section>
+
+        <section>
+            <h2>自作PC制作依頼</h2>
+            <p style="margin-bottom: 20px;">自作PCの制作依頼を受け付けています!(同大学内もしくはFF以外の人は受け付けない場合があります。ご了承ください。)</p>
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <iframe src="https://docs.google.com/forms/d/1ZUzGOJnNJklCILsIon1PyiVpD0XaF_bWnxvDgGb3_4s/viewform?embedded=true" class="google-form" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+
+    <footer><p>&copy; 2026 ThunFasky. All Rights Reserved.</p></footer>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        // ポストプロセス系のインポートは削除
+
+        const container = document.getElementById('cake-3d-box');
+
+        // シーン設定
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+        camera.position.set(0, 1, 3.5);
+
+        // レンダラー設定 (アルファ有効、背景透明)
+        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+        renderer.setClearColor(0x000000, 0);
+        const pixelScale = 80;
+        renderer.setSize(pixelScale, pixelScale, false); 
+        renderer.domElement.id = 'cake-3d-canvas';
+        container.appendChild(renderer.domElement);
+
+        // ライト設定
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.8); 
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        // モデルロード
+        let model;
+        const loader = new GLTFLoader();
+        
+        console.log("Loading model from: 3DModels/cake.glb");
+
+        loader.load('3DModels/cake.glb', (gltf) => {
+            model = gltf.scene;
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 1.8 / maxDim; 
+            model.scale.set(scale, scale, scale);
+
+            model.position.x = -center.x * scale;
+            model.position.y = -center.y * scale + 0.1;
+            model.position.z = -center.z * scale;
+
+            model.traverse((child) => {
+                if (child.isMesh && child.material) {
+                    child.material.metalness = 0;
+                    child.material.roughness = 0.8;
+                }
+            });
+
+            scene.add(model);
+            camera.lookAt(0, 0, 0);
+
+            console.log("Model successfully loaded!");
+
+        }, undefined, (error) => {
+            console.error('An error happened while loading the model:', error);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (model) {
+                model.rotation.y += 0.015;
+            }
+            // 通常のレンダリングに戻す
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+
+    <script>
+        /* --- モーダル制御（アニメーション強化） --- */
+        // 通常のテキストキャプション用
+        function openModal(src, caption) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImg');
+            const cap = document.getElementById('modalCaption');
+
+            img.src = src;
+            cap.textContent = caption; // テキストとして設定
+            
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+            });
+        }
+
+        // HTMLコンテンツ（スペック表など）をキャプションに表示する用
+        function openModalWithHtml(src, htmlContent) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImg');
+            const cap = document.getElementById('modalCaption');
+
+            img.src = src;
+            cap.innerHTML = htmlContent; // HTMLとして設定
+            
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }, 300);
+        }
+
+        /* --- 年齢計算 --- */
+        function updateBirthdayInfo() {
+            const birthDate = new Date(2006, 11, 12); 
+            const now = new Date();
+            let age = now.getFullYear() - birthDate.getFullYear();
+            if (now < new Date(now.getFullYear(), 11, 12)) age--;
+            document.getElementById('age-text').textContent = `CURRENT AGE: ${age}`;
+            let nextBirthday = new Date(now.getFullYear(), 11, 12);
+            if (now > nextBirthday) nextBirthday.setFullYear(now.getFullYear() + 1);
+            const diff = nextBirthday - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('timer').textContent = `${d}d ${String(h).padStart(2, '0')}h ${String(min).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+        }
+        setInterval(updateBirthdayInfo, 1000);
+        updateBirthdayInfo();
+
+        /* --- 「もっと見る」機能の実装 --- */
+        function setupLoadMore(containerId, limit) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            const items = Array.from(container.children).filter(el => el.tagName === 'DIV');
+            if (items.length <= limit) return;
+            items.forEach((item, index) => {
+                if (index >= limit) {
+                    item.classList.add('hidden-item');
+                }
+            });
+            const btn = document.createElement('button');
+            btn.textContent = "もっと表示";
+            btn.className = "load-more-btn";
+            btn.addEventListener('click', () => {
+                const isExpanded = btn.textContent === "閉じる";
+                if (isExpanded) {
+                    items.forEach((item, index) => {
+                        if (index >= limit) item.classList.add('hidden-item');
+                    });
+                    btn.textContent = "もっと表示";
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    items.forEach(item => item.classList.remove('hidden-item'));
+                    btn.textContent = "閉じる";
+                }
+            });
+            container.parentNode.insertBefore(btn, container.nextSibling);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            setupLoadMore('illust-grid', 12);
+            setupLoadMore('gallery-grid', 12);
+        });
+    </script>
+</body>
+</html>
