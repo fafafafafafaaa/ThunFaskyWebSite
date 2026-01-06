@@ -197,7 +197,6 @@
             width: 100% !important;
             height: 100% !important;
             image-rendering: pixelated; 
-            /* 発光しない白い縁取りをCSSで表現。色をイメージカラーに変更 */
             filter: drop-shadow(0px 0px 2px var(--accent-color)) drop-shadow(0px 0px 2px var(--accent-color));
         }
 
@@ -205,7 +204,7 @@
         .current-age { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 5px; }
         #timer { font-size: 1.8rem; color: #fff; letter-spacing: 2px; }
 
-        /* --- デバイスセクション（旧スタイルは削除し、collage-gridを利用） --- */
+        /* --- デバイスセクション --- */
         .spec-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-family: 'MyScoreFont', monospace; font-weight: normal; }
         .spec-table th, .spec-table td { text-align: left; padding: 8px 0; border-bottom: 1px solid #444; }
         .spec-table th { width: 110px; color: var(--accent-color); }
@@ -236,18 +235,18 @@
         .collage-item {
             margin: 0;
             padding: 0;
-            background-color: var(--card-bg); /* 背景をグレーに統一 */
+            background-color: var(--card-bg);
             border: none !important;
             border-radius: 0 !important;
             box-shadow: none !important;
             aspect-ratio: 1 / 1;
             overflow: hidden;
-            position: relative; /* ラベル配置用 */
+            position: relative;
         }
         .collage-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 1:1の枠に収める */
+            object-fit: cover;
             border: none !important;
             border-radius: 0 !important;
             transition: transform 0.3s ease, filter 0.3s ease;
@@ -270,7 +269,7 @@
             padding: 5px 10px;
             font-family: 'MyShikakuFont', sans-serif;
             font-size: 0.9rem;
-            pointer-events: none; /* クリックを画像に透過させる */
+            pointer-events: none;
         }
 
         /* --- もっと見るボタン --- */
@@ -297,7 +296,7 @@
 
         .font-digital { font-family: 'MyScoreFont', monospace; letter-spacing: 1px; font-weight: normal; }
 
-        /* --- 詳細表示用モーダル（アニメーション強化） --- */
+        /* --- 詳細表示用モーダル --- */
         .modal {
             display: none;
             position: fixed;
@@ -315,7 +314,7 @@
         .modal.show { opacity: 1; }
         .modal-content {
             max-width: 90%;
-            max-height: 70%; /* キャプションが入る分少し小さく */
+            max-height: 70%;
             border: 2px solid var(--accent-color);
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(255, 179, 0, 0.3);
@@ -328,14 +327,13 @@
             margin-top: 20px;
             color: #fff;
             font-size: 1rem;
-            text-align: left; /* スペック表などが見やすいように左寄せ */
+            text-align: left;
             font-family: 'MyShikakuFont', sans-serif;
             opacity: 0;
             transform: translateY(10px);
             transition: 0.3s delay 0.1s;
-            max-width: 90%; /* 画面幅に合わせる */
+            max-width: 90%;
         }
-        /* スペック表のスタイル調整 */
         .modal-caption .spec-table th {
             color: var(--accent-color);
             font-family: 'MyScoreFont', monospace;
@@ -346,7 +344,7 @@
 
         footer { text-align: center; padding: 30px; background-color: #111; font-size: 0.8rem; color: #777; border-top: 1px solid #333; }
 
-        /* --- クレジット表記用スタイル（追加分） --- */
+        /* --- クレジット表記用スタイル --- */
         .credits {
             margin-top: 10px;
             font-size: 0.8rem;
@@ -356,14 +354,8 @@
             padding: 10px;
             border-radius: 4px;
         }
-        .credits ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .credits li {
-            margin-bottom: 2px;
-        }
+        .credits ul { list-style: none; padding: 0; margin: 0; }
+        .credits li { margin-bottom: 2px; }
         .credits strong {
             color: var(--accent-color);
             margin-right: 5px;
@@ -402,11 +394,11 @@
             <h2>デバイス</h2>
             <div class="collage-grid" id="device-grid">
                 <div class="collage-item">
-                    <img src="images/desktopPic1.png" alt="Main PC" onclick="openModalWithHtml(this.src, '<h4>メインPC</h4><table class=\'spec-table\'><tr><th>CPU</th><td>Ryzen 9 9950X</td></tr><tr><th>GPU</th><td>Radeon RX 7900 XT OC</td></tr><tr><th>RAM</th><td>64GB DDR5</td></tr><tr><th>ROM</th><td>M.2 NVMe SSD 1+2+2TB</td></tr><tr><th>PSU</th><td>850w GOLD</td></tr><tr><th>Case</th><td>Geometric Future Model 5</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
+                    <img src="images/gallery/desktopPic1.png" alt="Main PC" onclick="openModalWithHtml(this.src, '<h4>メインPC</h4><table class=\'spec-table\'><tr><th>CPU</th><td>Ryzen 9 9950X</td></tr><tr><th>GPU</th><td>Radeon RX 7900 XT OC</td></tr><tr><th>RAM</th><td>64GB DDR5</td></tr><tr><th>ROM</th><td>M.2 NVMe SSD 1+2+2TB</td></tr><tr><th>PSU</th><td>850w GOLD</td></tr><tr><th>Case</th><td>Geometric Future Model 5</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
                     <div class="device-label">Main PC</div>
                 </div>
                 <div class="collage-item">
-                    <img src="images/laptopPic1.png" alt="Laptop" onclick="openModalWithHtml(this.src, '<h4>DELL Inspiron 14 5445</h4><table class=\'spec-table\'><tr><th>APU</th><td>Ryzen 7 8840U / Radeon 780M</td></tr><tr><th>RAM</th><td>32GB DDR5</td></tr><tr><th>ROM</th><td>SSD 1TB</td></tr><tr><th>RES</th><td>1920x1200 60Hz</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
+                    <img src="images/gallery/laptopPic1.png" alt="Laptop" onclick="openModalWithHtml(this.src, '<h4>DELL Inspiron 14 5445</h4><table class=\'spec-table\'><tr><th>APU</th><td>Ryzen 7 8840U / Radeon 780M</td></tr><tr><th>RAM</th><td>32GB DDR5</td></tr><tr><th>ROM</th><td>SSD 1TB</td></tr><tr><th>RES</th><td>1920x1200 60Hz</td></tr><tr><th>OS</th><td>Win11 Home</td></tr></table>')">
                     <div class="device-label">Laptop</div>
                 </div>
             </div>
@@ -417,101 +409,56 @@
             <h3>アプリケーション等</h3>
             <div class="media-grid" id="apps-grid">
                 <div class="media-item">
-                    <img src="images/MyFavMusicBox.png" alt="MyFavMusicBox" onclick="openModal(this.src, 'MyFavMusicBox')">
+                    <img src="images/gallery/MyFavMusicBox.png" alt="MyFavMusicBox" onclick="openModal(this.src, 'MyFavMusicBox')">
                     <div class="caption"><strong class="font-digital">MyFavMusicBox</strong><br>MP4やMP3等音声形式ファイルに対応</div>
                 </div>
             </div>
 
             <h3>イラスト</h3>
             <div class="collage-grid" id="illust-grid">
-                <div class="collage-item"><img src="images/バナーイラスト背景カラーあり.png" alt="ILLUST-MyDesk" onclick="openModal(this.src, '自分のデスク周りのイラスト')"></div>
-                <div class="collage-item"><img src="images/brimstone.png" alt="" onclick="openModal(this.src, 'スマホの扱いに慣れないブリムストーン')"></div>
-                <div class="collage-item"><img src="images/ヘイリーとエルフィン.png" alt="" onclick="openModal(this.src, 'ヘイリーとエルフィン')"></div>
-                <div class="collage-item"><img src="images/月島しじま.png" alt="" onclick="openModal(this.src, '月島しじま')"></div>
-                <div class="collage-item"><img src="images/シル.png" alt="" onclick="openModal(this.src, 'シル')"></div>
-                <div class="collage-item"><img src="images/ギデオン.png" alt="" onclick="openModal(this.src, 'ギデオン')"></div>
-                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
-                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
+                <p style="padding: 20px; color: #777;">Loading images...</p>
             </div>
 
             <h3>作曲したもの</h3>
-            
-            <div class="media-grid">
+            <div class="media-grid" id="music-grid">
                 <div style="padding: 10px; color: #888;">まだない</div>
             </div>
 
             <h2>作った動画</h2>
-            <div class="media-item">
-            
-            <video id="myVideo" controls playsinline style="width: 100%; border-radius: 4px; border: 1px solid #333;" poster="images/thumbnail_sample.jpg">
-                <source src="videos/M3 2025_Autumn Teres_DotBatTunes.mp4" type="video/mp4">
-                お使いのブラウザは動画タグに対応していません。
-            </video>
-
-            <div class="caption">
-                <strong class="font-digital" style="font-size:30px;">Teres 2025Autumn M3 CFD</strong>
-                
-                <div style="margin-top: 8px; margin-bottom: 12px;">
-                    <a href="https://twitter.com/TeresDtm/status/1981677048461726151" target="_blank" style="text-decoration: none; color: #1DA1F2; font-size: 0.9rem;">
-                        <i class="fab fa-twitter"></i> 元のツイート（公開元）を見る <i class="fas fa-external-link-alt" style="font-size: 0.8em;"></i>
-                    </a>
-                </div>
-
-                <div class="credits">
-                    <ul>
-                        <li><strong>Mastering:</strong> HALT (<a href="https://x.com/HALT668896" target="_blank" style="color: inherit;">@HALT668896</a>)</li>
-                        <li><strong>Illustration & Design:</strong> 空琳ゴ (<a href="https://x.com/sola_r1ngo" target="_blank" style="color: inherit;">@sola_r1ngo</a>)</li>
-                        <li><strong>CFD:</strong> ThunFasky</li>
-                    </ul>
+            <div class="media-grid" id="video-grid">
+                <div class="media-item">
+                    <video id="myVideo" controls playsinline style="width: 100%; border-radius: 4px; border: 1px solid #333;" poster="images/thumbnail_sample.jpg">
+                        <source src="videos/M3 2025_Autumn Teres_DotBatTunes.mp4" type="video/mp4">
+                        お使いのブラウザは動画タグに対応していません。
+                    </video>
+                    <div class="caption">
+                        <strong class="font-digital" style="font-size:30px;">Teres 2025Autumn M3 CFD</strong>
+                        <div style="margin-top: 8px; margin-bottom: 12px;">
+                            <a href="https://twitter.com/TeresDtm/status/1981677048461726151" target="_blank" style="text-decoration: none; color: #1DA1F2; font-size: 0.9rem;">
+                                <i class="fab fa-twitter"></i> 元のツイート（公開元）を見る <i class="fas fa-external-link-alt" style="font-size: 0.8em;"></i>
+                            </a>
+                        </div>
+                        <div class="credits">
+                            <ul>
+                                <li><strong>Mastering:</strong> HALT (<a href="https://x.com/HALT668896" target="_blank" style="color: inherit;">@HALT668896</a>)</li>
+                                <li><strong>Illustration & Design:</strong> 空琳ゴ (<a href="https://x.com/sola_r1ngo" target="_blank" style="color: inherit;">@sola_r1ngo</a>)</li>
+                                <li><strong>CFD:</strong> ThunFasky</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <script>
-                // ページが読み込まれたら音量を0.25 (25%) に設定する
                 const videoElement = document.getElementById('myVideo');
                 if (videoElement) {
                     videoElement.volume = 0.2;
                 }
             </script>
-
-        </div>
-
-                
-        </section>
-
-        <section>
-            <h2>ゲームのクリップ等</h2>
-            <div class="media-grid">
-                <div style="padding: 10px; color: #888;">まだない</div>
-                <!-- <div class="media-item">
-                    <video controls playsinline poster="https://via.placeholder.com/400x225?text=Thumbnail">
-                        <source src="sample_valorant.mp4" type="video/mp4">
-                    </video>
-                    <div class="caption"><strong class="font-digital">Valorant Clip #1</strong></div>
-                </div> -->
-            </div>
         </section>
 
         <section>
             <h2>ギャラリー</h2>
-            <div class="collage-grid" id="gallery-grid">
-                <div class="collage-item"><img src="images/desktopPic2.png" alt="desktopPic" onclick="openModal(this.src, 'デスクトップの中身')"></div>
-                <div class="collage-item"><img src="images/とりさん.png" alt="bird" onclick="openModal(this.src, '初詣の時に見た鳥')"></div>
-                <div class="collage-item"><img src="images/hatsumoude2026.jpg" alt="" onclick="openModal(this.src, '初詣2026')"></div>
-                <div class="collage-item"><img src="images/shizuoka.jpg" alt="" onclick="openModal(this.src, '年末富士山2025')"></div>
-                <div class="collage-item"><img src="images/akibasimulation2026.jpg" alt="" onclick="openModal(this.src, '秋葉シミュレーション2026')"></div>
-                <div class="collage-item"><img src="images/SuEn2Mid.jpg" alt="" onclick="openModal(this.src, '数円2中間結果')"></div>
-                <div class="collage-item"><img src="images/Christmas2025.jpg" alt="" onclick="openModal(this.src, 'バナル帰りに見たクリスマスの飾り物')"></div>
-                <div class="collage-item"><img src="images/調布祭Teres2025.jpg" alt="" onclick="openModal(this.src, '調布祭終わりの後ろ黒板')"></div>
-                <div class="collage-item"><img src="images/ぬいズ.jpg" alt="" onclick="openModal(this.src, '机の上に置いてあるぬいズ')"></div>
-                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
-                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
-                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
-                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
-                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div>
-                <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
-                <!-- <div class="collage-item"><img src="images/" alt="" onclick="openModal(this.src, '')"></div> -->
-            </div>
         </section>
 
         <section>
@@ -535,112 +482,165 @@
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        // ポストプロセス系のインポートは削除
 
         const container = document.getElementById('cake-3d-box');
+        if (container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+            camera.position.set(0, 1, 3.5);
 
-        // シーン設定
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-        camera.position.set(0, 1, 3.5);
+            const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+            renderer.setClearColor(0x000000, 0);
+            const pixelScale = 80;
+            renderer.setSize(pixelScale, pixelScale, false); 
+            renderer.domElement.id = 'cake-3d-canvas';
+            container.appendChild(renderer.domElement);
 
-        // レンダラー設定 (アルファ有効、背景透明)
-        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-        renderer.setClearColor(0x000000, 0);
-        const pixelScale = 80;
-        renderer.setSize(pixelScale, pixelScale, false); 
-        renderer.domElement.id = 'cake-3d-canvas';
-        container.appendChild(renderer.domElement);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.8); 
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            dirLight.position.set(5, 5, 5);
+            scene.add(dirLight);
 
-        // ライト設定
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.8); 
-        scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        dirLight.position.set(5, 5, 5);
-        scene.add(dirLight);
+            let model;
+            const loader = new GLTFLoader();
+            
+            loader.load('3DModels/cake.glb', (gltf) => {
+                model = gltf.scene;
+                const box = new THREE.Box3().setFromObject(model);
+                const size = box.getSize(new THREE.Vector3());
+                const center = box.getCenter(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 1.8 / maxDim; 
+                model.scale.set(scale, scale, scale);
+                model.position.x = -center.x * scale;
+                model.position.y = -center.y * scale + 0.1;
+                model.position.z = -center.z * scale;
 
-        // モデルロード
-        let model;
-        const loader = new GLTFLoader();
-        
-        console.log("Loading model from: 3DModels/cake.glb");
-
-        loader.load('3DModels/cake.glb', (gltf) => {
-            model = gltf.scene;
-
-            const box = new THREE.Box3().setFromObject(model);
-            const size = box.getSize(new THREE.Vector3());
-            const center = box.getCenter(new THREE.Vector3());
-
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const scale = 1.8 / maxDim; 
-            model.scale.set(scale, scale, scale);
-
-            model.position.x = -center.x * scale;
-            model.position.y = -center.y * scale + 0.1;
-            model.position.z = -center.z * scale;
-
-            model.traverse((child) => {
-                if (child.isMesh && child.material) {
-                    child.material.metalness = 0;
-                    child.material.roughness = 0.8;
-                }
+                model.traverse((child) => {
+                    if (child.isMesh && child.material) {
+                        child.material.metalness = 0;
+                        child.material.roughness = 0.8;
+                    }
+                });
+                scene.add(model);
+                camera.lookAt(0, 0, 0);
+            }, undefined, (error) => {
+                console.error('An error happened while loading the model:', error);
             });
 
-            scene.add(model);
-            camera.lookAt(0, 0, 0);
-
-            console.log("Model successfully loaded!");
-
-        }, undefined, (error) => {
-            console.error('An error happened while loading the model:', error);
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-            if (model) {
-                model.rotation.y += 0.015;
+            function animate() {
+                requestAnimationFrame(animate);
+                if (model) model.rotation.y += 0.015;
+                renderer.render(scene, camera);
             }
-            // 通常のレンダリングに戻す
-            renderer.render(scene, camera);
+            animate();
         }
-        animate();
     </script>
 
     <script>
-        /* --- モーダル制御（アニメーション強化） --- */
-        // 通常のテキストキャプション用
+        // --- 1. microCMSから画像を取得して仕分ける処理 ---
+        async function fetchMicroCMSImages() {
+            // ▼【重要】APIキー管理画面から最新のキーをコピーして貼り付けてください！
+            const API_KEY = 'sq0VTAMzwAIJNhnORsJRUmOnYGeuy88jbwUJ'; 
+            
+            const SERVICE_DOMAIN = 'thunfasky';
+            const ENDPOINT = 'images'; 
+            
+            const url = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/${ENDPOINT}`;
+
+            const illustGrid = document.getElementById('illust-grid');
+            const galleryGrid = document.getElementById('gallery-grid');
+            
+            if(!illustGrid || !galleryGrid) return;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'X-MICROCMS-API-KEY': API_KEY }
+                });
+                
+                if (!response.ok) {
+                    // 401などのエラー詳細を表示
+                    throw new Error(`通信エラー: ${response.status} (APIキーを確認してください)`);
+                }
+                
+                const data = await response.json();
+                console.log("取得データ:", data); 
+
+                // 初期化（Loading表示を消す）
+                // ※ギャラリー側にもLoading...を書いておくと親切です
+                illustGrid.innerHTML = '';
+                // galleryGrid.innerHTML = ''; // ギャラリーの既存写真(HTMLで書いた分)を残すならここは消さない！
+
+                if (data.contents.length === 0) {
+                    return; // データがなければ何もしない
+                }
+
+                data.contents.forEach(item => {
+                    // 画像とタイトルの取得（IDに合わせて調整してください）
+                    const imageObj = item.image || item.gazou || item.img;
+                    const titleStr = item.title || item.name || 'No Title';
+
+                    // ▼【重要】カテゴリーによる仕分け処理
+                    // microCMSで設定した「セレクトフィールドのID」と「選択肢の名前」に合わせてください
+                    // 例: IDが 'category' で、選択肢が 'イラスト(illust)' と 'ギャラリー(gallery)' の場合
+                    
+                    const categories = item.category || []; // セレクトフィールドは配列で返ってくることが多いです
+                    
+                    // HTML要素を作る
+                    if (imageObj && imageObj.url) {
+                        const div = document.createElement('div');
+                        div.className = 'collage-item';
+                        div.innerHTML = `<img src="${imageObj.url}" alt="${titleStr}" onclick="openModal(this.src, '${titleStr}')">`;
+
+                        // カテゴリーに含まれる文字で判定して振り分け
+                        if (categories.includes('イラスト') || categories.includes('illust')) {
+                            illustGrid.appendChild(div);
+                        } 
+                        else if (categories.includes('ギャラリー') || categories.includes('gallery') || categories.includes('photo')) {
+                            // ギャラリーに追加（既存の最後に足されます）
+                            galleryGrid.appendChild(div);
+                        } 
+                        else {
+                            // カテゴリー設定がない場合、とりあえずイラストに入れておく等の処理
+                            // illustGrid.appendChild(div);
+                            console.log("カテゴリー不明な画像:", titleStr);
+                        }
+                    }
+                });
+
+                // もっと見るボタンの再設定
+                setupLoadMore('illust-grid', 8);
+                setupLoadMore('gallery-grid', 8);
+
+            } catch (error) {
+                console.error('microCMS Fetch Error:', error);
+                illustGrid.innerHTML = `<p style="color:red; padding:20px;">エラー: ${error.message}</p>`;
+            }
+        }
+
+        // --- 2. モーダル制御（変更なし） ---
         function openModal(src, caption) {
             const modal = document.getElementById('imageModal');
             const img = document.getElementById('modalImg');
             const cap = document.getElementById('modalCaption');
-
             img.src = src;
-            cap.textContent = caption; // テキストとして設定
-            
+            cap.textContent = caption;
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
-
-            requestAnimationFrame(() => {
-                modal.classList.add('show');
-            });
+            requestAnimationFrame(() => modal.classList.add('show'));
         }
-
-        // HTMLコンテンツ（スペック表など）をキャプションに表示する用
+        
+        // ... (openModalWithHtml, closeModal は変更なし) ...
         function openModalWithHtml(src, htmlContent) {
             const modal = document.getElementById('imageModal');
             const img = document.getElementById('modalImg');
             const cap = document.getElementById('modalCaption');
-
             img.src = src;
-            cap.innerHTML = htmlContent; // HTMLとして設定
-            
+            cap.innerHTML = htmlContent;
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
-
-            requestAnimationFrame(() => {
-                modal.classList.add('show');
-            });
+            requestAnimationFrame(() => modal.classList.add('show'));
         }
 
         function closeModal() {
@@ -652,13 +652,14 @@
             }, 300);
         }
 
-        /* --- 年齢計算 --- */
+        // --- 3. 年齢計算（変更なし） ---
         function updateBirthdayInfo() {
             const birthDate = new Date(2006, 11, 12); 
             const now = new Date();
             let age = now.getFullYear() - birthDate.getFullYear();
             if (now < new Date(now.getFullYear(), 11, 12)) age--;
             document.getElementById('age-text').textContent = `CURRENT AGE: ${age}`;
+            
             let nextBirthday = new Date(now.getFullYear(), 11, 12);
             if (now > nextBirthday) nextBirthday.setFullYear(now.getFullYear() + 1);
             const diff = nextBirthday - now;
@@ -668,19 +669,19 @@
             const s = Math.floor((diff % (1000 * 60)) / 1000);
             document.getElementById('timer').textContent = `${d}d ${String(h).padStart(2, '0')}h ${String(min).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
         }
-        setInterval(updateBirthdayInfo, 1000);
-        updateBirthdayInfo();
 
-        /* --- 「もっと見る」機能の実装 --- */
+        // --- 4. 「もっと見る」ボタン機能（変更なし） ---
         function setupLoadMore(containerId, limit) {
             const container = document.getElementById(containerId);
             if(!container) return;
+            const nextEl = container.nextElementSibling;
+            if(nextEl && nextEl.classList.contains('load-more-btn')) {
+                nextEl.remove();
+            }
             const items = Array.from(container.children).filter(el => el.tagName === 'DIV');
             if (items.length <= limit) return;
             items.forEach((item, index) => {
-                if (index >= limit) {
-                    item.classList.add('hidden-item');
-                }
+                if (index >= limit) item.classList.add('hidden-item');
             });
             const btn = document.createElement('button');
             btn.textContent = "もっと表示";
@@ -700,9 +701,17 @@
             });
             container.parentNode.insertBefore(btn, container.nextSibling);
         }
+
+        // --- 実行開始 ---
         document.addEventListener('DOMContentLoaded', () => {
-            setupLoadMore('illust-grid', 12);
-            setupLoadMore('gallery-grid', 12);
+            fetchMicroCMSImages();
+            setupLoadMore('apps-grid', 3);
+            setupLoadMore('music-grid', 3);
+            setupLoadMore('video-grid', 3);
+            setupLoadMore('clip-grid', 3);
+            setupLoadMore('gallery-grid', 8);
+            setInterval(updateBirthdayInfo, 1000);
+            updateBirthdayInfo();
         });
     </script>
 </body>
