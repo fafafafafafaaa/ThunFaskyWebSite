@@ -459,6 +459,8 @@
 
         <section>
             <h2>ギャラリー</h2>
+            <div class="collage-grid" id="gallery-grid">
+                </div>
         </section>
 
         <section>
@@ -541,17 +543,18 @@
     <script>
         // --- 1. microCMSから画像を取得して仕分ける処理 ---
         async function fetchMicroCMSImages() {
-            // ▼【重要】APIキー管理画面から最新のキーをコピーして貼り付けてください！
+            // ▼ 正しいAPIキー（小文字s始まり）
             const API_KEY = 'sq0VTAMzwAIJNhnORsJRUmOnYGeuy88jbwUJ'; 
             
             const SERVICE_DOMAIN = 'thunfasky';
             const ENDPOINT = 'images'; 
             
-            const url = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/${ENDPOINT}`;
+            const url = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/${ENDPOINT}?limit=100`;
 
             const illustGrid = document.getElementById('illust-grid');
             const galleryGrid = document.getElementById('gallery-grid');
             
+            // 要素がなければ中断（エラー回避）
             if(!illustGrid || !galleryGrid) return;
 
             try {
@@ -559,52 +562,50 @@
                     headers: { 'X-MICROCMS-API-KEY': API_KEY }
                 });
                 
-                if (!response.ok) {
-                    // 401などのエラー詳細を表示
-                    throw new Error(`通信エラー: ${response.status} (APIキーを確認してください)`);
-                }
+                if (!response.ok) throw new Error(`通信エラー: ${response.status}`);
                 
                 const data = await response.json();
-                console.log("取得データ:", data); 
+                console.log("=== microCMS取得データ ===", data); 
 
-                // 初期化（Loading表示を消す）
-                // ※ギャラリー側にもLoading...を書いておくと親切です
+                // イラスト欄は初期化（Loading文字を消す）
                 illustGrid.innerHTML = '';
-                // galleryGrid.innerHTML = ''; // ギャラリーの既存写真(HTMLで書いた分)を残すならここは消さない！
+                
+                // ギャラリー欄も初期化（必要に応じて）
+                galleryGrid.innerHTML = '';
 
                 if (data.contents.length === 0) {
-                    return; // データがなければ何もしない
+                    illustGrid.innerHTML = '<p>画像がありません</p>';
+                    return;
                 }
 
                 data.contents.forEach(item => {
-                    // 画像とタイトルの取得（IDに合わせて調整してください）
-                    const imageObj = item.image || item.gazou || item.img;
                     const titleStr = item.title || item.name || 'No Title';
+                    const imageObj = item.image || item.gazou || item.img;
+                    
+                    // カテゴリ判定（配列・文字列両対応）
+                    let categories = [];
+                    const rawCategory = item.category || item.genre || item.type;
+                    if (Array.isArray(rawCategory)) {
+                        categories = rawCategory; 
+                    } else if (typeof rawCategory === 'string') {
+                        categories = [rawCategory]; 
+                    }
 
-                    // ▼【重要】カテゴリーによる仕分け処理
-                    // microCMSで設定した「セレクトフィールドのID」と「選択肢の名前」に合わせてください
-                    // 例: IDが 'category' で、選択肢が 'イラスト(illust)' と 'ギャラリー(gallery)' の場合
-                    
-                    const categories = item.category || []; // セレクトフィールドは配列で返ってくることが多いです
-                    
-                    // HTML要素を作る
                     if (imageObj && imageObj.url) {
                         const div = document.createElement('div');
                         div.className = 'collage-item';
                         div.innerHTML = `<img src="${imageObj.url}" alt="${titleStr}" onclick="openModal(this.src, '${titleStr}')">`;
 
-                        // カテゴリーに含まれる文字で判定して振り分け
+                        // 振り分け処理
                         if (categories.includes('イラスト') || categories.includes('illust')) {
                             illustGrid.appendChild(div);
                         } 
-                        else if (categories.includes('ギャラリー') || categories.includes('gallery') || categories.includes('photo')) {
-                            // ギャラリーに追加（既存の最後に足されます）
+                        else if (categories.includes('ギャラリー') || categories.includes('gallery')) {
                             galleryGrid.appendChild(div);
                         } 
                         else {
-                            // カテゴリー設定がない場合、とりあえずイラストに入れておく等の処理
+                            // カテゴリ不明な場合の処理（必要ならコメントアウト解除）
                             // illustGrid.appendChild(div);
-                            console.log("カテゴリー不明な画像:", titleStr);
                         }
                     }
                 });
@@ -615,11 +616,12 @@
 
             } catch (error) {
                 console.error('microCMS Fetch Error:', error);
-                illustGrid.innerHTML = `<p style="color:red; padding:20px;">エラー: ${error.message}</p>`;
+                // エラー時はユーザーに分かりやすく表示（デバッグログではない）
+                illustGrid.innerHTML = `<p style="color:red; padding:20px;">画像の読み込みに失敗しました。</p>`;
             }
         }
 
-        // --- 2. モーダル制御（変更なし） ---
+        // --- 2. モーダル制御 ---
         function openModal(src, caption) {
             const modal = document.getElementById('imageModal');
             const img = document.getElementById('modalImg');
@@ -630,8 +632,7 @@
             document.body.style.overflow = "hidden";
             requestAnimationFrame(() => modal.classList.add('show'));
         }
-        
-        // ... (openModalWithHtml, closeModal は変更なし) ...
+
         function openModalWithHtml(src, htmlContent) {
             const modal = document.getElementById('imageModal');
             const img = document.getElementById('modalImg');
@@ -652,7 +653,7 @@
             }, 300);
         }
 
-        // --- 3. 年齢計算（変更なし） ---
+        // --- 3. 年齢計算 ---
         function updateBirthdayInfo() {
             const birthDate = new Date(2006, 11, 12); 
             const now = new Date();
@@ -670,7 +671,7 @@
             document.getElementById('timer').textContent = `${d}d ${String(h).padStart(2, '0')}h ${String(min).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
         }
 
-        // --- 4. 「もっと見る」ボタン機能（変更なし） ---
+        // --- 4. 「もっと見る」ボタン機能 ---
         function setupLoadMore(containerId, limit) {
             const container = document.getElementById(containerId);
             if(!container) return;
